@@ -2990,11 +2990,19 @@ function handlePlaceholder(template, key, value, placeholders /* placeholders to
     if (phs) {
         for (const placeholder of phs) {
             const transformer = (0, regexUtils_1.validateRegex)(placeholder.transformer);
+            let extractedValue = null;
             if (transformer === null || transformer === void 0 ? void 0 : transformer.pattern) {
-                const extractedValue = (0, regexUtils_1.transformStringToOptionalValue)(value, transformer);
+                extractedValue = (0, regexUtils_1.transformStringToOptionalValue)(value, transformer);
+            }
+            else if (placeholder.cb) {
+                const f = new Function('source', placeholder.cb);
+                extractedValue = f(value);
+            }
+            if (extractedValue) {
+                // const extractedValue = transformStringToOptionalValue(value, transformer)
                 // note: `.replace` will return the full string again if there was no match
                 // note: This is mostly backwards compatibility
-                if (extractedValue && ((transformer.method && transformer.method !== 'replace') || extractedValue !== value)) {
+                if (extractedValue && (((transformer === null || transformer === void 0 ? void 0 : transformer.method) && transformer.method !== 'replace') || extractedValue !== value)) {
                     if (placeholderPrMap) {
                         (0, utils_1.createOrSet)(placeholderPrMap, placeholder.name, extractedValue);
                     }

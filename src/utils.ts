@@ -123,7 +123,7 @@ export function resolveMode(mode: string | undefined, commitMode: boolean): 'PR'
   }
 
   if (mode !== undefined) {
-    const upperCaseMode = mode.toUpperCase();
+    const upperCaseMode = mode.toUpperCase()
     if (upperCaseMode === 'COMMIT') {
       return 'COMMIT'
     } else if (upperCaseMode === 'HYBRID') {

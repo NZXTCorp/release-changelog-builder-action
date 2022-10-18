@@ -60,7 +60,8 @@ export interface TagResolver {
 export interface Placeholder {
   name: string // the name of the new placeholder
   source: string // the src placeholder which will be used to apply the transformer on
-  transformer: Regex // the transformer to use to transform the original placeholder into the custom placeheolder
+  transformer?: Regex // the transformer to use to transform the original placeholder into the custom placeheolder
+  cb?: string
 }
 
 export const DefaultConfiguration: Configuration = {

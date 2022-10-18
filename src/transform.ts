@@ -524,11 +524,20 @@ function handlePlaceholder(
   if (phs) {
     for (const placeholder of phs) {
       const transformer = validateRegex(placeholder.transformer)
+
+      let extractedValue = null
       if (transformer?.pattern) {
-        const extractedValue = transformStringToOptionalValue(value, transformer)
+        extractedValue = transformStringToOptionalValue(value, transformer)
+      } else if (placeholder.cb) {
+        const f = new Function('source', placeholder.cb)
+        extractedValue = f(value)
+      }
+
+      if (extractedValue) {
+        // const extractedValue = transformStringToOptionalValue(value, transformer)
         // note: `.replace` will return the full string again if there was no match
         // note: This is mostly backwards compatibility
-        if (extractedValue && ((transformer.method && transformer.method !== 'replace') || extractedValue !== value)) {
+        if (extractedValue && ((transformer?.method && transformer.method !== 'replace') || extractedValue !== value)) {
           if (placeholderPrMap) {
             createOrSet(placeholderPrMap, placeholder.name, extractedValue)
           }
